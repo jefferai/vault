@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Policies are how authorization is done in Vault, allowing you to restrict which parts of Vault a user can access.">
+
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+
+    <title>Policies - Vault by HashiCorp</title>
+
+    <link href="/assets/stylesheets/application-4b1f25b3.css" rel="stylesheet"/>
+
+    <!--[if lt IE 9]><script src="/assets/javascripts/html5shiv-62fced3a.js" type="text/javascript"></script><script src="/assets/javascripts/respond.min-88c91176.js" type="text/javascript"></script><![endif]-->
+
+    
+  </head>
+
+  <body id="page-Policies" class="page-Policies layout-docs page-sub">
+
+<div id="header" class="navbar-static-top">
+	<div class="container">
+        <div class="row">
+            <div class="col-md-offset-1 col-md-10 col-xs-12">
+                <div class="navbar-header">
+                    <div class="navbar-brand">
+                         <a class="logo" href="/">Vault</a>
+                    </div>
+                    <ul class="main-links nav navbar-nav navbar-right hidden-xs">
+                        <li class="first li-under"><a href="/intro/index.html">Intro</a></li>
+                        <li class="li-under"><a href="/docs/index.html">Docs</a></li>
+                        <li class="li-under"><a href="/community.html">Community</a></li>
+                    </ul>
+                    <button class="navbar-toggle" type="button">
+                       <span class="sr-only">Toggle navigation</span>
+                       <span class="icon-bar"></span>
+                       <span class="icon-bar"></span>
+                       <span class="icon-bar"></span>
+                    </button>                       
+                </div>
+                <div class="buttons hidden-xs">
+            		<nav role="navigation">
+            			<ul class="nav navbar-nav navbar-right">
+            				<li class="first"><a href="/downloads.html">Download</a></li>
+            				<li class=""><a href="https://github.com/hashicorp/vault">GitHub</a></li>
+            			</ul>
+            		</nav>
+                </div>
+            </div>         
+        </div>
+    </div>
+</div>
+
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-offset-1 col-md-2 col-sm-3 col-xs-12">
+					<div class="docs-sidebar hidden-print affix-top" role="complementary">
+			<ul class="nav docs-sidenav">
+				<li>
+					<a href="/docs/index.html">Documentation Home</a>
+				</li>
+
+				<li>
+					<a href="/docs/internals/index.html">Internals</a>
+					<ul class="nav">
+						<li>
+							<a href="/docs/internals/architecture.html">Architecture</a>
+                        </li>
+
+						<li>
+							<a href="/docs/internals/high-availability.html">High Availability</a>
+						</li>
+
+						<li>
+							<a href="/docs/internals/security.html">Security Model</a>
+                        </li>
+
+						<li>
+							<a href="/docs/internals/telemetry.html">Telemetry</a>
+                        </li>
+
+						<li>
+							<a href="/docs/internals/token.html">Token Authentication</a>
+						</li>
+					</ul>
+				</li>
+
+				<li>
+					<a href="/docs/install/index.html">Installation</a>
+				</li>
+
+				<li class="active">
+					<a href="/docs/concepts/index.html">Basic Concepts</a>
+					<ul class="nav">
+						<li>
+							<a href="/docs/concepts/dev-server.html">"Dev" Server</a>
+						</li>
+
+						<li>
+							<a href="/docs/concepts/seal.html">Seal/Unseal</a>
+						</li>
+
+						<li>
+							<a href="/docs/concepts/lease.html">Lease, Renew, and Revoke</a>
+						</li>
+
+						<li>
+							<a href="/docs/concepts/auth.html">Authentication</a>
+						</li>
+
+						<li>
+							<a href="/docs/concepts/tokens.html">Tokens</a>
+						</li>
+
+						<li class="active">
+							<a href="/docs/concepts/policies.html">Access Control Policies</a>
+						</li>
+
+						<li>
+							<a href="/docs/concepts/ha.html">High Availability</a>
+						</li>
+					</ul>
+				</li>
+
+				<li>
+					<a href="/docs/config/index.html">Configuration</a>
+				</li>
+
+				<li>
+					<a href="/docs/commands/index.html">Commands (CLI)</a>
+					<ul class="nav">
+						<li>
+							<a href="/docs/commands/help.html">Help</a>
+						</li>
+
+						<li>
+							<a href="/docs/commands/read-write.html">Reading and Writing Data</a>
+						</li>
+					</ul>
+				</li>
+
+				<li>
+					<a href="/docs/http/index.html">HTTP API</a>
+				</li>
+
+				<hr>
+
+				<li>
+					<a href="/docs/secrets/index.html">Secret Backends</a>
+					<ul class="nav">
+						<li>
+							<a href="/docs/secrets/aws/index.html">AWS</a>
+						</li>
+
+						<li>
+							<a href="/docs/secrets/consul/index.html">Consul</a>
+						</li>
+
+						<li>
+							<a href="/docs/secrets/pki/index.html">PKI (Certificates)</a>
+                        </li>
+
+						<li>
+							<a href="/docs/secrets/postgresql/index.html">PostgreSQL</a>
+                        </li>
+
+						<li>
+							<a href="/docs/secrets/mysql/index.html">MySQL</a>
+						</li>
+
+						<li>
+							<a href="/docs/secrets/transit/index.html">Transit</a>
+						</li>
+
+						<li>
+							<a href="/docs/secrets/generic/index.html">Generic</a>
+						</li>
+
+						<li>
+							<a href="/docs/secrets/custom.html">Custom</a>
+						</li>
+					</ul>
+				</li>
+
+				<li>
+					<a href="/docs/auth/index.html">Auth Backends</a>
+					<ul class="nav">
+						<li>
+                            <a href="/docs/auth/token.html">Tokens</a>
+						</li>
+
+						<li>
+							<a href="/docs/auth/github.html">GitHub</a>
+						</li>
+
+						<li>
+							<a href="/docs/auth/app-id.html">App ID</a>
+						</li>
+
+						<li>
+							<a href="/docs/auth/userpass.html">Username &amp; Password</a>
+                        </li>
+
+						<li>
+							<a href="/docs/auth/cert.html">TLS Certificates</a>
+                        </li>
+
+						<li>
+							<a href="/docs/auth/ldap.html">LDAP</a>
+						</li>
+					</ul>
+				</li>
+
+				<li>
+					<a href="/docs/audit/index.html">Audit Backends</a>
+					<ul class="nav">
+						<li>
+							<a href="/docs/audit/file.html">File</a>
+                        </li>
+
+						<li>
+							<a href="/docs/audit/syslog.html">Syslog</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+
+		</div>  
+		<div id="main-content" class="col-sm-9 col-md-8 col-xs-12" role="main">
+			<div class="bs-docs-section">
+				
+	<h1>Access Control Policies</h1>
+<p>After <a href="/docs/concepts/auth.html">authenticating</a> with Vault, the
+next step is authorization. This is the process of determining what
+a user is allowed to do. Authorization is unified in Vault in the form
+of <em>policies</em>.</p>
+<p>Policies are <a href="https://github.com/hashicorp/hcl">HCL</a> or JSON documents
+that describe what parts of Vault a user is allowed to access. An example
+of a policy is shown below:</p>
+<pre class="highlight javascript"><code><span class="nx">path</span> <span class="s2">"sys"</span> <span class="p">{</span>
+  <span class="nx">policy</span> <span class="o">=</span> <span class="s2">"deny"</span>
+<span class="p">}</span>
+
+<span class="nx">path</span> <span class="s2">"secret"</span> <span class="p">{</span>
+  <span class="nx">policy</span> <span class="o">=</span> <span class="s2">"write"</span>
+<span class="p">}</span>
+
+<span class="nx">path</span> <span class="s2">"secret/foo"</span> <span class="p">{</span>
+  <span class="nx">policy</span> <span class="o">=</span> <span class="s2">"read"</span>
+<span class="p">}</span>
+</code></pre>
+<p>Policies use prefix-based routing to apply rules. They are deny by default,
+so if a path isn&#39;t explicitly given, Vault will reject any access to it.
+This works well due to Vault&#39;s architecture of being like a filesystem:
+everything has a path associated with it, including the core configuration
+mechanism under &quot;sys&quot;.</p>
+
+<h2>Policies</h2>
+<p>Allowed policies for a path are:</p>
+
+<ul>
+<li><p><a name="write"/><a href="#write"><code>write</code></a> - Read, write access to a path.</p>
+</li>
+<li><p><a name="read"/><a href="#read"><code>read</code></a> - Read-only access to a path.</p>
+</li>
+<li><p><a name="deny"/><a href="#deny"><code>deny</code></a> - No access allowed.</p>
+</li>
+<li><p><a name="sudo"/><a href="#sudo"><code>sudo</code></a> - Read, write, and root access to a path.</p>
+</li>
+</ul>
+<p>The only non-obvious policy is &quot;sudo&quot;. Some routes within Vault and mounted
+backends are marked as <em>root</em> paths. Clients aren&#39;t allowed to access root
+paths unless they are a root user (have the special policy &quot;root&quot;) or
+have access to that path with the &quot;sudo&quot; policy.</p>
+<p>For example, modifying the audit log backends is done via root paths.
+Only root or &quot;sudo&quot; privilege users are allowed to do this.</p>
+
+<h2>Root Policy</h2>
+<p>The &quot;root&quot; policy is a special policy that can not be modified or removed.
+Any user associated with the &quot;root&quot; policy becomes a root user. A root
+user can do <em>anything</em> within Vault.</p>
+<p>There always exists at least one root user (associated with the token
+when initializing a new server). After this root user, it is recommended
+to create more strictly controlled users. The original root token should
+be protected accordingly.</p>
+
+<h2>Managing Policies</h2>
+<p>Policy management can be done via the API or CLI. The CLI commands are
+<code>vault policies</code> and <code>vault policy-write</code>. Please see the help associated
+with these commands for more information. They are very easy to use.</p>
+
+<h2>Associating Policies</h2>
+<p>To associate a policy with a user, you must consult the documentation for
+the authentication backend you&#39;re using.</p>
+<p>For tokens, they are associated at creation time with <code>vault token-create</code>
+and the <code>-policy</code> flags. Child tokens can be associated with a subset of
+a parent&#39;s policies. Root users can assign any policies.</p>
+<p>There is no way to modify the policies associated with an active
+identity. The identity must be revoked and reauthenticated to receive
+the new policy list.</p>
+<p>If an <em>existing</em> policy is modified, the modifications propagate
+to all associated users instantly. The above paragraph is more specifically
+stating that you can&#39;t add new or remove policies associated with an
+active identity.</p>
+
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+<script type="text/x-handlebars" data-template-name="demo">
+{{outlet}}
+</script>
+
+<script type="text/x-handlebars" data-template-name="demo/step">
+
+<div class="instruction-wrapper">
+    <div class="instruction">
+        <p>
+        <strong>{{model.humanName}}</strong>
+        </p>
+
+        {{partial model.instructionTemplate}}
+    </div>
+</div>
+
+<span class="close-terminal" {{action "close"}}>X</span>
+
+<div {{bind-attr class=":demo-terminal fullscreen:fullscreen" }}>
+    <div class="log">{{renderedLogs}}</div>
+
+    <form {{action "submitText" on="submit"}}>
+        {{#unless isLoading}}${{/unless}} {{input value=currentText class="shell" spellcheck="false"}}
+    </form>
+
+    {{#if isLoading}}
+    <div class="loading-bar"></div>
+    {{/if}}
+</div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="welcome">
+    <p>
+        This tutorial is great for getting familiar with the command line
+         interface to Vault. As soon as you opened this terminal, you connected to a real in-memory Vault server.
+        Any commands you enter will work as they would with Vault normally, but leaving this page
+        will end the session.
+    </p>
+    <p>
+     Please note that this is running in a shared environment, so avoid setting any real secrets.
+    </p>
+    <p>
+        <strong>Use the command "next" to move forward</strong>.
+    </p>
+    <p>This will work throughout
+        the tutorial, along with "previous" to go back a step.
+    </p>
+</script>
+
+
+<script type="text/x-handlebars" data-template-name="steps">
+    <p>
+        This tutorial will cover the following steps:
+    </p>
+    <ul>
+        <li>- Initializing and unsealing your Vault</li>
+        <li>- Authorizing your requests to Vault</li>
+        <li>- Reading and writing secrets</li>
+        <li>- Sealing your Vault</li>
+    </ul>
+    <p>
+        <strong>Again, use "next" to move to the first step – initializing your Vault</strong>.
+    </p>
+</script>
+
+<script type="text/x-handlebars" data-template-name="init">
+    <p>
+        To get started, we need to initialize an instance of Vault for you
+        to work with.
+    </p>
+    <p>
+        While initializing, you can configure the seal behavior
+        of Vault.
+        </p>
+    <p>
+        Initialize Vault now, with 1 unseal key for simplicity, using the command:
+    </p>
+    <p>
+        <code>vault init -key-shares=1 -key-threshold=1</code>
+    </p>
+    <p>
+        You'll notice Vault prints out several keys here. Don't clear your terminal,
+        as these are needed in the next few steps.
+    </p>
+</script>
+
+<script type="text/x-handlebars" data-template-name="unseal">
+    <p>
+        When a Vault server is started, it starts in a sealed state.
+         In this state, Vault is configured to know where and how to access the
+         physical storage, but doesn't know how to decrypt any of it.
+    </p>
+    <p>
+        Vault encrypts data with an encryption key. This key is encrypted with the "master key", which
+        isn't stored. Decrypting the master key requires a threshold of shards. In this example,
+        we use one shard to decrypt this master key.
+    </p>
+    <p>
+        Unseal the Vault:
+    </p>
+    <p>
+        <code>vault unseal &lt;key 1&gt;</code>
+    </p>
+</script>
+
+<script type="text/x-handlebars" data-template-name="auth">
+    <p>
+        Before performing any operation with Vault, the
+        connecting client must be authenticated. Authentication is
+        the process of verifying a person or machine is who they say
+        they are and assigning an identity to them. This identity is then
+        used when making requests with Vault.
+    </p>
+    <p>
+        For simplicity, we'll use the root token we generated on init in Step 2. This
+        output should be available in the scrollback.
+    </p>
+    <p>
+        Authorize with a client token:
+    </p>
+    <p>
+        <code>vault auth &lt;root token&gt;</code>
+    </p>
+</script>
+
+<script type="text/x-handlebars" data-template-name="secrets">
+    <p>
+        Now that Vault has been set-up, we can start reading and writing secrets
+        with the default mounted secret backend. Secrets written to Vault
+        are encrypted and then written to the backend storage.
+        The backend storage mechanism never sees the unencrypted
+        value and doesn't have the means necessary to decrypt
+        it without Vault.
+    </p>
+    <p>
+        <code>vault write secret/hello value=world</code>
+    </p>
+    <p>
+        Of course, you can then read this data too:
+    </p>
+    <p>
+        <code>vault read secret/hello</code>
+    </p>
+</script>
+
+<script type="text/x-handlebars" data-template-name="seal">
+    <p>
+        There is also an API to seal the Vault. This will throw
+        away the encryption key and require another unseal process
+        to restore it. Sealing only requires a single operator
+        with root privileges. This is typically part of a rare "break glass
+        procedure".
+    </p>
+    <p>
+        This way, if there is a detected intrusion, the Vault data can be locked
+        quickly to try to minimize damages. It can't be accessed again
+        without access to the master key shards.
+    </p>
+    <p>
+        <code>vault seal</code>
+    </p>
+</script>
+
+<script type="text/x-handlebars" data-template-name="finish">
+    <p>
+        Thanks for trying out the Vault CLI. If you want to keep playing with
+        commands, use "fu" to go fullscreen.
+    </p>
+    <p>
+        Note that the Vault CLI uses the HTTP API, which gives you full access to Vault. Every aspect
+        of Vault can be controlled via this API.
+    </p>
+    <p>
+        We recommend reading through the <a href="/intro/index.html">intro guide</a> next, which will
+        provide more background information, use cases and examples.
+    </p>
+</script>
+
+	<div id="footer">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-offset-1 col-md-5 col-sm-6 col-xs-12">
+					<ul class="footer-links nav navbar-nav">
+						<li class="li-under"><a href="/intro/index.html">Intro</a></li>
+						<li class="li-under"><a href="/docs/index.html">Docs</a></li>
+						<li class="li-under"><a href="/community.html">Community</a></li>
+						<li class="li-under"><a href="/security.html">Security</a></li>
+					</ul>
+				</div>
+				<div class="footer-hashi col-md-5 col-sm-6 col-xs-12">
+					<div class="pull-right">
+						<span>A <a href="https://www.hashicorp.com">HashiCorp</a> Project.</span>
+						<a class="hashi-logo" href="https://www.hashicorp.com"><i class="hashi-logo"></i></a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-62364009-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<script src="/assets/javascripts/application-e782a4a8.js" type="text/javascript"></script>
+
+</body>
+</html>

@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Welcome to the intro guide to Vault! This guide is the best place to start with Vault. We cover what Vault is, what problems it can solve, how it compares to existing software, and contains a quick start for using Vault.">
+
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+
+    <title>Introduction - Vault by HashiCorp</title>
+
+    <link href="/assets/stylesheets/application-4b1f25b3.css" rel="stylesheet"/>
+
+    <!--[if lt IE 9]><script src="/assets/javascripts/html5shiv-62fced3a.js" type="text/javascript"></script><script src="/assets/javascripts/respond.min-88c91176.js" type="text/javascript"></script><![endif]-->
+
+    
+  </head>
+
+  <body id="page-Introduction" class="page-Introduction layout-intro page-sub">
+
+<div id="header" class="navbar-static-top">
+	<div class="container">
+        <div class="row">
+            <div class="col-md-offset-1 col-md-10 col-xs-12">
+                <div class="navbar-header">
+                    <div class="navbar-brand">
+                         <a class="logo" href="/">Vault</a>
+                    </div>
+                    <ul class="main-links nav navbar-nav navbar-right hidden-xs">
+                        <li class="first li-under"><a href="/intro/index.html">Intro</a></li>
+                        <li class="li-under"><a href="/docs/index.html">Docs</a></li>
+                        <li class="li-under"><a href="/community.html">Community</a></li>
+                    </ul>
+                    <button class="navbar-toggle" type="button">
+                       <span class="sr-only">Toggle navigation</span>
+                       <span class="icon-bar"></span>
+                       <span class="icon-bar"></span>
+                       <span class="icon-bar"></span>
+                    </button>                       
+                </div>
+                <div class="buttons hidden-xs">
+            		<nav role="navigation">
+            			<ul class="nav navbar-nav navbar-right">
+            				<li class="first"><a href="/downloads.html">Download</a></li>
+            				<li class=""><a href="https://github.com/hashicorp/vault">GitHub</a></li>
+            			</ul>
+            		</nav>
+                </div>
+            </div>         
+        </div>
+    </div>
+</div>
+
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-offset-1 col-md-2 col-sm-3 col-xs-12">
+					<div class="docs-sidebar hidden-print affix-top" role="complementary">
+			<ul class="nav docs-sidenav">
+				<li class="active">
+					<a href="/intro/index.html">What is Vault?</a>
+				</li>
+
+				<li>
+					<a href="/intro/use-cases.html">Use Cases</a>
+				</li>
+
+				<li>
+					<a href="/intro/vs/index.html">Vault vs. Other Software</a>
+					<ul class="nav">
+						<li>
+							<a href="/intro/vs/chef-puppet-etc.html">Chef, Puppet, etc.</a>
+						</li>
+
+						<li>
+							<a href="/intro/vs/hsm.html">HSMs</a>
+						</li>
+
+						<li>
+							<a href="/intro/vs/dropbox.html">Dropbox</a>
+                        </li>
+
+						<li>
+							<a href="/intro/vs/consul.html">Consul</a>
+                        </li>
+
+						<li>
+							<a href="/intro/vs/kms.html">Amazon KMS</a>
+                        </li>
+
+						<li>
+							<a href="/intro/vs/keywhiz.html">Keywhiz</a>
+						</li>
+
+						<li>
+							<a href="/intro/vs/custom.html">Custom Solutions</a>
+						</li>
+					</ul>
+				</li>
+
+				<li>
+					<a href="/intro/getting-started/install.html">Getting Started</a>
+					<ul class="nav">
+						<li>
+							<a href="/intro/getting-started/install.html">Install Vault</a>
+						</li>
+
+						<li>
+							<a href="/intro/getting-started/dev-server.html">Starting the Server</a>
+						</li>
+
+						<li>
+							<a href="/intro/getting-started/first-secret.html">Your First Secret</a>
+						</li>
+
+						<li>
+							<a href="/intro/getting-started/secret-backends.html">Secret Backends</a>
+						</li>
+
+						<li>
+							<a href="/intro/getting-started/dynamic-secrets.html">Dynamic Secrets</a>
+						</li>
+
+						<li>
+							<a href="/intro/getting-started/help.html">Built-in Help</a>
+						</li>
+
+						<li>
+							<a href="/intro/getting-started/authentication.html">Authentication</a>
+						</li>
+
+						<li>
+							<a href="/intro/getting-started/acl.html">ACLs</a>
+						</li>
+
+						<li>
+							<a href="/intro/getting-started/deploy.html">Deploy Vault</a>
+						</li>
+
+						<li>
+							<a href="/intro/getting-started/next-steps.html">Next Steps</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+
+		</div>  
+		<div id="main-content" class="col-sm-9 col-md-8 col-xs-12" role="main">
+			<div class="bs-docs-section">
+				
+	<h1>Introduction to Vault</h1>
+<p>Welcome to the intro guide to Vault! This guide is the best
+place to start with Vault. We cover what Vault is, what
+problems it can solve, how it compares to existing software,
+and contains a quick start for using Vault.</p>
+<p>If you are already familiar with the basics of Vault, the
+<a href="/docs/">documentation</a> provides a better reference
+guide for all available features as well as internals.</p>
+
+<h2>What is Vault?</h2>
+<p>Vault is a tool for securely accessing <em>secrets</em>. A secret is anything
+that you want to tightly control access to, such as API keys, passwords,
+certificates, and more. Vault provides a unified interface to any
+secret, while providing tight access control and recording a detailed
+audit log.</p>
+<p>A modern system requires access to a multitude of secrets: database
+credentials, API keys for external services, credentials for
+service-oriented architecture communication, etc. Understanding who is
+accessing what secrets is already very difficult and platform-specific.
+Adding on key rolling, secure storage, and detailed audit logs is almost
+impossible without a custom solution. This is where Vault steps in.</p>
+<p>Examples work best to showcase Vault. Please see the
+<a href="/intro/use-cases.html">use cases</a>.</p>
+<p>The key features of Vault are:</p>
+
+<ul>
+<li><p><strong>Secure Secret Storage</strong>: Arbitrary key/value secrets can be stored
+in Vault. Vault encrypts these secrets prior to writing them to persistent
+storage, so gaining access to the raw storage isn&#39;t enough to access
+your secrets. Vault can write to disk, <a href="http://www.consul.io">Consul</a>,
+and more.</p>
+</li>
+<li><p><strong>Dynamic Secrets</strong>: Vault can generate secrets on-demand for some
+systems, such as AWS or SQL databases. For example, when an application
+needs to access an S3 bucket, it asks Vault for credentials, and Vault
+will generate an AWS keypair with valid permissions on demand. After
+creating these dynamic secrets, Vault will also automatically revoke them
+after the lease is up.</p>
+</li>
+<li><p><strong>Data Encryption</strong>: Vault can encrypt and decrypt data without storing
+it. This allows security teams to define encryption parameters and
+developers to store encrypted data in a location such as SQL without
+having to design their own encryption methods.</p>
+</li>
+<li><p><strong>Leasing and Renewal</strong>: All secrets in Vault have a <em>lease</em> associated
+with it. At the end of the lease, Vault will automatically revoke that
+secret. Clients are able to renew leases via built-in renew APIs.</p>
+</li>
+<li><p><strong>Revocation</strong>: Vault has built-in support for secret revocation. Vault
+can revoke not only single secrets, but a tree of secrets, for example
+all secrets read by a specific user, or all secrets of a particular type.
+Revocation assists in key rolling as well as locking down systems in the
+case of an intrusion.</p>
+</li>
+</ul>
+
+<h2>Next Steps</h2>
+<p>See the page on <a href="/intro/use-cases.html">Vault use cases</a> to see the
+multiple ways Vault can be used. Then see
+<a href="/intro/vs/">how Vault compares to other software</a>
+to see how it fits into your existing infrastructure. Finally, continue onwards with
+the <a href="/intro/getting-started/install.html">getting started guide</a> to use
+Vault to read, write, and create real secrets and see how it works in practice.</p>
+
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+<script type="text/x-handlebars" data-template-name="demo">
+{{outlet}}
+</script>
+
+<script type="text/x-handlebars" data-template-name="demo/step">
+
+<div class="instruction-wrapper">
+    <div class="instruction">
+        <p>
+        <strong>{{model.humanName}}</strong>
+        </p>
+
+        {{partial model.instructionTemplate}}
+    </div>
+</div>
+
+<span class="close-terminal" {{action "close"}}>X</span>
+
+<div {{bind-attr class=":demo-terminal fullscreen:fullscreen" }}>
+    <div class="log">{{renderedLogs}}</div>
+
+    <form {{action "submitText" on="submit"}}>
+        {{#unless isLoading}}${{/unless}} {{input value=currentText class="shell" spellcheck="false"}}
+    </form>
+
+    {{#if isLoading}}
+    <div class="loading-bar"></div>
+    {{/if}}
+</div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="welcome">
+    <p>
+        This tutorial is great for getting familiar with the command line
+         interface to Vault. As soon as you opened this terminal, you connected to a real in-memory Vault server.
+        Any commands you enter will work as they would with Vault normally, but leaving this page
+        will end the session.
+    </p>
+    <p>
+     Please note that this is running in a shared environment, so avoid setting any real secrets.
+    </p>
+    <p>
+        <strong>Use the command "next" to move forward</strong>.
+    </p>
+    <p>This will work throughout
+        the tutorial, along with "previous" to go back a step.
+    </p>
+</script>
+
+
+<script type="text/x-handlebars" data-template-name="steps">
+    <p>
+        This tutorial will cover the following steps:
+    </p>
+    <ul>
+        <li>- Initializing and unsealing your Vault</li>
+        <li>- Authorizing your requests to Vault</li>
+        <li>- Reading and writing secrets</li>
+        <li>- Sealing your Vault</li>
+    </ul>
+    <p>
+        <strong>Again, use "next" to move to the first step – initializing your Vault</strong>.
+    </p>
+</script>
+
+<script type="text/x-handlebars" data-template-name="init">
+    <p>
+        To get started, we need to initialize an instance of Vault for you
+        to work with.
+    </p>
+    <p>
+        While initializing, you can configure the seal behavior
+        of Vault.
+        </p>
+    <p>
+        Initialize Vault now, with 1 unseal key for simplicity, using the command:
+    </p>
+    <p>
+        <code>vault init -key-shares=1 -key-threshold=1</code>
+    </p>
+    <p>
+        You'll notice Vault prints out several keys here. Don't clear your terminal,
+        as these are needed in the next few steps.
+    </p>
+</script>
+
+<script type="text/x-handlebars" data-template-name="unseal">
+    <p>
+        When a Vault server is started, it starts in a sealed state.
+         In this state, Vault is configured to know where and how to access the
+         physical storage, but doesn't know how to decrypt any of it.
+    </p>
+    <p>
+        Vault encrypts data with an encryption key. This key is encrypted with the "master key", which
+        isn't stored. Decrypting the master key requires a threshold of shards. In this example,
+        we use one shard to decrypt this master key.
+    </p>
+    <p>
+        Unseal the Vault:
+    </p>
+    <p>
+        <code>vault unseal &lt;key 1&gt;</code>
+    </p>
+</script>
+
+<script type="text/x-handlebars" data-template-name="auth">
+    <p>
+        Before performing any operation with Vault, the
+        connecting client must be authenticated. Authentication is
+        the process of verifying a person or machine is who they say
+        they are and assigning an identity to them. This identity is then
+        used when making requests with Vault.
+    </p>
+    <p>
+        For simplicity, we'll use the root token we generated on init in Step 2. This
+        output should be available in the scrollback.
+    </p>
+    <p>
+        Authorize with a client token:
+    </p>
+    <p>
+        <code>vault auth &lt;root token&gt;</code>
+    </p>
+</script>
+
+<script type="text/x-handlebars" data-template-name="secrets">
+    <p>
+        Now that Vault has been set-up, we can start reading and writing secrets
+        with the default mounted secret backend. Secrets written to Vault
+        are encrypted and then written to the backend storage.
+        The backend storage mechanism never sees the unencrypted
+        value and doesn't have the means necessary to decrypt
+        it without Vault.
+    </p>
+    <p>
+        <code>vault write secret/hello value=world</code>
+    </p>
+    <p>
+        Of course, you can then read this data too:
+    </p>
+    <p>
+        <code>vault read secret/hello</code>
+    </p>
+</script>
+
+<script type="text/x-handlebars" data-template-name="seal">
+    <p>
+        There is also an API to seal the Vault. This will throw
+        away the encryption key and require another unseal process
+        to restore it. Sealing only requires a single operator
+        with root privileges. This is typically part of a rare "break glass
+        procedure".
+    </p>
+    <p>
+        This way, if there is a detected intrusion, the Vault data can be locked
+        quickly to try to minimize damages. It can't be accessed again
+        without access to the master key shards.
+    </p>
+    <p>
+        <code>vault seal</code>
+    </p>
+</script>
+
+<script type="text/x-handlebars" data-template-name="finish">
+    <p>
+        Thanks for trying out the Vault CLI. If you want to keep playing with
+        commands, use "fu" to go fullscreen.
+    </p>
+    <p>
+        Note that the Vault CLI uses the HTTP API, which gives you full access to Vault. Every aspect
+        of Vault can be controlled via this API.
+    </p>
+    <p>
+        We recommend reading through the <a href="/intro/index.html">intro guide</a> next, which will
+        provide more background information, use cases and examples.
+    </p>
+</script>
+
+	<div id="footer">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-offset-1 col-md-5 col-sm-6 col-xs-12">
+					<ul class="footer-links nav navbar-nav">
+						<li class="li-under"><a href="/intro/index.html">Intro</a></li>
+						<li class="li-under"><a href="/docs/index.html">Docs</a></li>
+						<li class="li-under"><a href="/community.html">Community</a></li>
+						<li class="li-under"><a href="/security.html">Security</a></li>
+					</ul>
+				</div>
+				<div class="footer-hashi col-md-5 col-sm-6 col-xs-12">
+					<div class="pull-right">
+						<span>A <a href="https://www.hashicorp.com">HashiCorp</a> Project.</span>
+						<a class="hashi-logo" href="https://www.hashicorp.com"><i class="hashi-logo"></i></a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-62364009-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<script src="/assets/javascripts/application-e782a4a8.js" type="text/javascript"></script>
+
+</body>
+</html>

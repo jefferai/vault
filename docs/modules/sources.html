@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="As documented in usage, the only required parameter when using a module is the `source` parameter which tells Vault where the module can be found and what constraints to put on the module if any (such as branches for Git, versions, etc.).">
+
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+
+    <title>Module Sources - Vault by HashiCorp</title>
+
+    <link href="/assets/stylesheets/application-4b1f25b3.css" rel="stylesheet"/>
+
+    <!--[if lt IE 9]><script src="/assets/javascripts/html5shiv-62fced3a.js" type="text/javascript"></script><script src="/assets/javascripts/respond.min-88c91176.js" type="text/javascript"></script><![endif]-->
+
+    
+  </head>
+
+  <body id="page-Module Sources" class="page-Module Sources layout-docs page-sub">
+
+<div id="header" class="navbar-static-top">
+	<div class="container">
+        <div class="row">
+            <div class="col-md-offset-1 col-md-10 col-xs-12">
+                <div class="navbar-header">
+                    <div class="navbar-brand">
+                         <a class="logo" href="/">Vault</a>
+                    </div>
+                    <ul class="main-links nav navbar-nav navbar-right hidden-xs">
+                        <li class="first li-under"><a href="/intro/index.html">Intro</a></li>
+                        <li class="li-under"><a href="/docs/index.html">Docs</a></li>
+                        <li class="li-under"><a href="/community.html">Community</a></li>
+                    </ul>
+                    <button class="navbar-toggle" type="button">
+                       <span class="sr-only">Toggle navigation</span>
+                       <span class="icon-bar"></span>
+                       <span class="icon-bar"></span>
+                       <span class="icon-bar"></span>
+                    </button>                       
+                </div>
+                <div class="buttons hidden-xs">
+            		<nav role="navigation">
+            			<ul class="nav navbar-nav navbar-right">
+            				<li class="first"><a href="/downloads.html">Download</a></li>
+            				<li class=""><a href="https://github.com/hashicorp/vault">GitHub</a></li>
+            			</ul>
+            		</nav>
+                </div>
+            </div>         
+        </div>
+    </div>
+</div>
+
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-offset-1 col-md-2 col-sm-3 col-xs-12">
+					<div class="docs-sidebar hidden-print affix-top" role="complementary">
+			<ul class="nav docs-sidenav">
+				<li>
+					<a href="/docs/index.html">Documentation Home</a>
+				</li>
+
+				<li>
+					<a href="/docs/internals/index.html">Internals</a>
+					<ul class="nav">
+						<li>
+							<a href="/docs/internals/architecture.html">Architecture</a>
+                        </li>
+
+						<li>
+							<a href="/docs/internals/high-availability.html">High Availability</a>
+						</li>
+
+						<li>
+							<a href="/docs/internals/security.html">Security Model</a>
+                        </li>
+
+						<li>
+							<a href="/docs/internals/telemetry.html">Telemetry</a>
+                        </li>
+
+						<li>
+							<a href="/docs/internals/token.html">Token Authentication</a>
+						</li>
+					</ul>
+				</li>
+
+				<li>
+					<a href="/docs/install/index.html">Installation</a>
+				</li>
+
+				<li>
+					<a href="/docs/concepts/index.html">Basic Concepts</a>
+					<ul class="nav">
+						<li>
+							<a href="/docs/concepts/dev-server.html">"Dev" Server</a>
+						</li>
+
+						<li>
+							<a href="/docs/concepts/seal.html">Seal/Unseal</a>
+						</li>
+
+						<li>
+							<a href="/docs/concepts/lease.html">Lease, Renew, and Revoke</a>
+						</li>
+
+						<li>
+							<a href="/docs/concepts/auth.html">Authentication</a>
+						</li>
+
+						<li>
+							<a href="/docs/concepts/tokens.html">Tokens</a>
+						</li>
+
+						<li>
+							<a href="/docs/concepts/policies.html">Access Control Policies</a>
+						</li>
+
+						<li>
+							<a href="/docs/concepts/ha.html">High Availability</a>
+						</li>
+					</ul>
+				</li>
+
+				<li>
+					<a href="/docs/config/index.html">Configuration</a>
+				</li>
+
+				<li>
+					<a href="/docs/commands/index.html">Commands (CLI)</a>
+					<ul class="nav">
+						<li>
+							<a href="/docs/commands/help.html">Help</a>
+						</li>
+
+						<li>
+							<a href="/docs/commands/read-write.html">Reading and Writing Data</a>
+						</li>
+					</ul>
+				</li>
+
+				<li>
+					<a href="/docs/http/index.html">HTTP API</a>
+				</li>
+
+				<hr>
+
+				<li>
+					<a href="/docs/secrets/index.html">Secret Backends</a>
+					<ul class="nav">
+						<li>
+							<a href="/docs/secrets/aws/index.html">AWS</a>
+						</li>
+
+						<li>
+							<a href="/docs/secrets/consul/index.html">Consul</a>
+						</li>
+
+						<li>
+							<a href="/docs/secrets/pki/index.html">PKI (Certificates)</a>
+                        </li>
+
+						<li>
+							<a href="/docs/secrets/postgresql/index.html">PostgreSQL</a>
+                        </li>
+
+						<li>
+							<a href="/docs/secrets/mysql/index.html">MySQL</a>
+						</li>
+
+						<li>
+							<a href="/docs/secrets/transit/index.html">Transit</a>
+						</li>
+
+						<li>
+							<a href="/docs/secrets/generic/index.html">Generic</a>
+						</li>
+
+						<li>
+							<a href="/docs/secrets/custom.html">Custom</a>
+						</li>
+					</ul>
+				</li>
+
+				<li>
+					<a href="/docs/auth/index.html">Auth Backends</a>
+					<ul class="nav">
+						<li>
+                            <a href="/docs/auth/token.html">Tokens</a>
+						</li>
+
+						<li>
+							<a href="/docs/auth/github.html">GitHub</a>
+						</li>
+
+						<li>
+							<a href="/docs/auth/app-id.html">App ID</a>
+						</li>
+
+						<li>
+							<a href="/docs/auth/userpass.html">Username &amp; Password</a>
+                        </li>
+
+						<li>
+							<a href="/docs/auth/cert.html">TLS Certificates</a>
+                        </li>
+
+						<li>
+							<a href="/docs/auth/ldap.html">LDAP</a>
+						</li>
+					</ul>
+				</li>
+
+				<li>
+					<a href="/docs/audit/index.html">Audit Backends</a>
+					<ul class="nav">
+						<li>
+							<a href="/docs/audit/file.html">File</a>
+                        </li>
+
+						<li>
+							<a href="/docs/audit/syslog.html">Syslog</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+
+		</div>  
+		<div id="main-content" class="col-sm-9 col-md-8 col-xs-12" role="main">
+			<div class="bs-docs-section">
+				
+	<h1>Module Sources</h1>
+<p>As documented in <a href="/docs/modules/usage.html">usage</a>, the only required
+parameter when using a module is the <code>source</code> parameter which tells Vault
+where the module can be found and what constraints to put on the module
+if any (such as branches for Git, versions, etc.).</p>
+<p>Vault manages modules for you: it downloads them, organizes them
+on disk, checks for updates, etc. Vault uses this source parameter for
+the download/update of modules.</p>
+<p>Vault supports the following sources:</p>
+
+<ul>
+<li><p>Local file paths</p>
+</li>
+<li><p>GitHub</p>
+</li>
+<li><p>BitBucket</p>
+</li>
+<li><p>Generic Git, Mercurial repositories</p>
+</li>
+<li><p>HTTP URLs</p>
+</li>
+</ul>
+<p>Each is documented further below.</p>
+
+<h2>Local File Paths</h2>
+<p>The easiest source is the local file path. For maximum portability, this
+should be a relative file path into a subdirectory. This allows you to
+organize your Vault configuration into modules within one repository,
+for example.</p>
+<p>An example is shown below:</p>
+<pre class="highlight javascript"><code><span class="nx">module</span> <span class="s2">"consul"</span> <span class="p">{</span>
+  <span class="nx">source</span> <span class="o">=</span> <span class="s2">"./consul"</span>
+<span class="p">}</span>
+</code></pre>
+<p>Updates for file paths are automatic: when &quot;downloading&quot; the module
+using the <a href="/docs/commands/get.html">get command</a>, Vault will create
+a symbolic link to the original directory. Therefore, any changes are
+automatically instantly available.</p>
+
+<h2>GitHub</h2>
+<p>Vault will automatically recognize GitHub URLs and turn them into
+the proper Git repository. The syntax is simple:</p>
+<pre class="highlight javascript"><code><span class="nx">module</span> <span class="s2">"consul"</span> <span class="p">{</span>
+  <span class="nx">source</span> <span class="o">=</span> <span class="s2">"github.com/hashicorp/example"</span>
+<span class="p">}</span>
+</code></pre>
+<p>Subdirectories within the repository can also be referenced:</p>
+<pre class="highlight javascript"><code><span class="nx">module</span> <span class="s2">"consul"</span> <span class="p">{</span>
+  <span class="nx">source</span> <span class="o">=</span> <span class="s2">"github.com/hashicorp/example//subdir"</span>
+<span class="p">}</span>
+</code></pre>
+<p><strong>Note:</strong> The double-slash is important. It is what tells Vault that
+that is the separator for a subdirectory, and not part of the repository
+itself.</p>
+<p>GitHub source URLs will require that Git is installed on your system
+and that you have the proper access to the repository.</p>
+<p>You can use the same parameters to GitHub repositories as you can generic
+Git repositories (such as tags or branches). See the documentation for generic
+Git repositories for more information.</p>
+
+<h2>BitBucket</h2>
+<p>Vault will automatically recognize BitBucket URLs and turn them into
+the proper Git or Mercurial repository. An example:</p>
+<pre class="highlight javascript"><code><span class="nx">module</span> <span class="s2">"consul"</span> <span class="p">{</span>
+  <span class="nx">source</span> <span class="o">=</span> <span class="s2">"bitbucket.org/hashicorp/example"</span>
+<span class="p">}</span>
+</code></pre>
+<p>Subdirectories within the repository can also be referenced:</p>
+<pre class="highlight javascript"><code><span class="nx">module</span> <span class="s2">"consul"</span> <span class="p">{</span>
+  <span class="nx">source</span> <span class="o">=</span> <span class="s2">"bitbucket.org/hashicorp/example//subdir"</span>
+<span class="p">}</span>
+</code></pre>
+<p><strong>Note:</strong> The double-slash is important. It is what tells Vault that
+that is the separator for a subdirectory, and not part of the repository
+itself.</p>
+<p>BitBucket URLs will require that Git or Mercurial is installed on your
+system, depending on the source URL.</p>
+
+<h2>Generic Git Repository</h2>
+<p>Generic Git repositories are also supported. The value of <code>source</code> in this
+case should be a complete Git-compatible URL. Using Git requires that
+Git is installed on your system. Example:</p>
+<pre class="highlight javascript"><code><span class="nx">module</span> <span class="s2">"consul"</span> <span class="p">{</span>
+  <span class="nx">source</span> <span class="o">=</span> <span class="s2">"git://hashicorp.com/module.git"</span>
+<span class="p">}</span>
+</code></pre>
+<p>You can also use protocols such as HTTP or SSH, but you&#39;ll have to hint
+to Vault (using the forced source type syntax documented below) to use
+Git:</p>
+<pre class="highlight javascript"><code><span class="nx">module</span> <span class="s2">"consul"</span> <span class="p">{</span>
+  <span class="nx">source</span> <span class="o">=</span> <span class="s2">"git::https://hashicorp.com/module.git"</span>
+<span class="p">}</span>
+</code></pre>
+<p>URLs for Git repositories (of any protocol) support the following query
+parameters:</p>
+
+<ul>
+<li><a name="ref"/><a href="#ref"><code>ref</code></a> - The ref to checkout. This can be a branch, tag, commit, etc.
+</li>
+</ul>
+<p>An example of using these parameters is shown below:</p>
+<pre class="highlight javascript"><code><span class="nx">module</span> <span class="s2">"consul"</span> <span class="p">{</span>
+  <span class="nx">source</span> <span class="o">=</span> <span class="s2">"git::https://hashicorp.com/module.git?ref=master"</span>
+<span class="p">}</span>
+</code></pre>
+
+<h2>Generic Mercurial Repository</h2>
+<p>Generic Mercurial repositories are supported. The value of <code>source</code> in this
+case should be a complete Mercurial-compatible URL. Using Mercurial requires that
+Mercurial is installed on your system. Example:</p>
+<pre class="highlight javascript"><code><span class="nx">module</span> <span class="s2">"consul"</span> <span class="p">{</span>
+  <span class="nx">source</span> <span class="o">=</span> <span class="s2">"hg::http://hashicorp.com/module.hg"</span>
+<span class="p">}</span>
+</code></pre>
+<p>In the case of above, we used the forced source type syntax documented below.
+Mercurial repositories require this.</p>
+<p>URLs for Mercurial repositories (of any protocol) support the following query
+parameters:</p>
+
+<ul>
+<li><a name="rev"/><a href="#rev"><code>rev</code></a> - The rev to checkout. This can be a branch, tag, commit, etc.
+</li>
+</ul>
+
+<h2>HTTP URLs</h2>
+<p>Any HTTP endpoint can serve up Vault modules. For HTTP URLs (SSL is
+supported, as well), Vault will make a GET request to the given URL.
+An additional GET parameter <code>vault-get=1</code> will be appended, allowing
+you to optionally render the page differently when Vault is requesting it.</p>
+<p>Vault then looks for the resulting module URL in the following order.</p>
+<p>First, if a header <code>X-Vault-Get</code> is present, then it should contain
+the source URL of the actual module. This will be used.</p>
+<p>If the header isn&#39;t present, Vault will look for a <code>&lt;meta&gt;</code> tag
+with the name of &quot;vault-get&quot;. The value will be used as the source
+URL.</p>
+
+<h2>Forced Source Type</h2>
+<p>In a couple places above, we&#39;ve referenced &quot;forced source type.&quot; Forced
+source type is a syntax added to URLs that allow you to force a specific
+method for download/updating the module. It is used to disambiguate URLs.</p>
+<p>For example, the source &quot;<a href="http://hashicorp.com/foo.git">http://hashicorp.com/foo.git</a>&quot; could just as
+easily be a plain HTTP URL as it might be a Git repository speaking the
+HTTP protocol. The forced source type syntax is used to force Vault
+one way or the other.</p>
+<p>Example:</p>
+<pre class="highlight javascript"><code><span class="nx">module</span> <span class="s2">"consul"</span> <span class="p">{</span>
+  <span class="nx">source</span> <span class="o">=</span> <span class="s2">"git::http://hashicorp.com/foo.git"</span>
+<span class="p">}</span>
+</code></pre>
+<p>The above will force Vault to get the module using Git, despite it
+being an HTTP URL.</p>
+<p>If a forced source type isn&#39;t specified, Vault will match the exact
+protocol if it supports it. It will not try multiple methods. In the case
+above, it would&#39;ve used the HTTP method.</p>
+
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+<script type="text/x-handlebars" data-template-name="demo">
+{{outlet}}
+</script>
+
+<script type="text/x-handlebars" data-template-name="demo/step">
+
+<div class="instruction-wrapper">
+    <div class="instruction">
+        <p>
+        <strong>{{model.humanName}}</strong>
+        </p>
+
+        {{partial model.instructionTemplate}}
+    </div>
+</div>
+
+<span class="close-terminal" {{action "close"}}>X</span>
+
+<div {{bind-attr class=":demo-terminal fullscreen:fullscreen" }}>
+    <div class="log">{{renderedLogs}}</div>
+
+    <form {{action "submitText" on="submit"}}>
+        {{#unless isLoading}}${{/unless}} {{input value=currentText class="shell" spellcheck="false"}}
+    </form>
+
+    {{#if isLoading}}
+    <div class="loading-bar"></div>
+    {{/if}}
+</div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="welcome">
+    <p>
+        This tutorial is great for getting familiar with the command line
+         interface to Vault. As soon as you opened this terminal, you connected to a real in-memory Vault server.
+        Any commands you enter will work as they would with Vault normally, but leaving this page
+        will end the session.
+    </p>
+    <p>
+     Please note that this is running in a shared environment, so avoid setting any real secrets.
+    </p>
+    <p>
+        <strong>Use the command "next" to move forward</strong>.
+    </p>
+    <p>This will work throughout
+        the tutorial, along with "previous" to go back a step.
+    </p>
+</script>
+
+
+<script type="text/x-handlebars" data-template-name="steps">
+    <p>
+        This tutorial will cover the following steps:
+    </p>
+    <ul>
+        <li>- Initializing and unsealing your Vault</li>
+        <li>- Authorizing your requests to Vault</li>
+        <li>- Reading and writing secrets</li>
+        <li>- Sealing your Vault</li>
+    </ul>
+    <p>
+        <strong>Again, use "next" to move to the first step – initializing your Vault</strong>.
+    </p>
+</script>
+
+<script type="text/x-handlebars" data-template-name="init">
+    <p>
+        To get started, we need to initialize an instance of Vault for you
+        to work with.
+    </p>
+    <p>
+        While initializing, you can configure the seal behavior
+        of Vault.
+        </p>
+    <p>
+        Initialize Vault now, with 1 unseal key for simplicity, using the command:
+    </p>
+    <p>
+        <code>vault init -key-shares=1 -key-threshold=1</code>
+    </p>
+    <p>
+        You'll notice Vault prints out several keys here. Don't clear your terminal,
+        as these are needed in the next few steps.
+    </p>
+</script>
+
+<script type="text/x-handlebars" data-template-name="unseal">
+    <p>
+        When a Vault server is started, it starts in a sealed state.
+         In this state, Vault is configured to know where and how to access the
+         physical storage, but doesn't know how to decrypt any of it.
+    </p>
+    <p>
+        Vault encrypts data with an encryption key. This key is encrypted with the "master key", which
+        isn't stored. Decrypting the master key requires a threshold of shards. In this example,
+        we use one shard to decrypt this master key.
+    </p>
+    <p>
+        Unseal the Vault:
+    </p>
+    <p>
+        <code>vault unseal &lt;key 1&gt;</code>
+    </p>
+</script>
+
+<script type="text/x-handlebars" data-template-name="auth">
+    <p>
+        Before performing any operation with Vault, the
+        connecting client must be authenticated. Authentication is
+        the process of verifying a person or machine is who they say
+        they are and assigning an identity to them. This identity is then
+        used when making requests with Vault.
+    </p>
+    <p>
+        For simplicity, we'll use the root token we generated on init in Step 2. This
+        output should be available in the scrollback.
+    </p>
+    <p>
+        Authorize with a client token:
+    </p>
+    <p>
+        <code>vault auth &lt;root token&gt;</code>
+    </p>
+</script>
+
+<script type="text/x-handlebars" data-template-name="secrets">
+    <p>
+        Now that Vault has been set-up, we can start reading and writing secrets
+        with the default mounted secret backend. Secrets written to Vault
+        are encrypted and then written to the backend storage.
+        The backend storage mechanism never sees the unencrypted
+        value and doesn't have the means necessary to decrypt
+        it without Vault.
+    </p>
+    <p>
+        <code>vault write secret/hello value=world</code>
+    </p>
+    <p>
+        Of course, you can then read this data too:
+    </p>
+    <p>
+        <code>vault read secret/hello</code>
+    </p>
+</script>
+
+<script type="text/x-handlebars" data-template-name="seal">
+    <p>
+        There is also an API to seal the Vault. This will throw
+        away the encryption key and require another unseal process
+        to restore it. Sealing only requires a single operator
+        with root privileges. This is typically part of a rare "break glass
+        procedure".
+    </p>
+    <p>
+        This way, if there is a detected intrusion, the Vault data can be locked
+        quickly to try to minimize damages. It can't be accessed again
+        without access to the master key shards.
+    </p>
+    <p>
+        <code>vault seal</code>
+    </p>
+</script>
+
+<script type="text/x-handlebars" data-template-name="finish">
+    <p>
+        Thanks for trying out the Vault CLI. If you want to keep playing with
+        commands, use "fu" to go fullscreen.
+    </p>
+    <p>
+        Note that the Vault CLI uses the HTTP API, which gives you full access to Vault. Every aspect
+        of Vault can be controlled via this API.
+    </p>
+    <p>
+        We recommend reading through the <a href="/intro/index.html">intro guide</a> next, which will
+        provide more background information, use cases and examples.
+    </p>
+</script>
+
+	<div id="footer">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-offset-1 col-md-5 col-sm-6 col-xs-12">
+					<ul class="footer-links nav navbar-nav">
+						<li class="li-under"><a href="/intro/index.html">Intro</a></li>
+						<li class="li-under"><a href="/docs/index.html">Docs</a></li>
+						<li class="li-under"><a href="/community.html">Community</a></li>
+						<li class="li-under"><a href="/security.html">Security</a></li>
+					</ul>
+				</div>
+				<div class="footer-hashi col-md-5 col-sm-6 col-xs-12">
+					<div class="pull-right">
+						<span>A <a href="https://www.hashicorp.com">HashiCorp</a> Project.</span>
+						<a class="hashi-logo" href="https://www.hashicorp.com"><i class="hashi-logo"></i></a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-62364009-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<script src="/assets/javascripts/application-e782a4a8.js" type="text/javascript"></script>
+
+</body>
+</html>

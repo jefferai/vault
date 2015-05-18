@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Authentication to Vault gives a user access to use Vault. Vault can authenticate using multiple methods.">
+
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+
+    <title>Authentication - Vault by HashiCorp</title>
+
+    <link href="/assets/stylesheets/application-4b1f25b3.css" rel="stylesheet"/>
+
+    <!--[if lt IE 9]><script src="/assets/javascripts/html5shiv-62fced3a.js" type="text/javascript"></script><script src="/assets/javascripts/respond.min-88c91176.js" type="text/javascript"></script><![endif]-->
+
+    
+  </head>
+
+  <body id="page-Authentication" class="page-Authentication layout-intro page-sub">
+
+<div id="header" class="navbar-static-top">
+	<div class="container">
+        <div class="row">
+            <div class="col-md-offset-1 col-md-10 col-xs-12">
+                <div class="navbar-header">
+                    <div class="navbar-brand">
+                         <a class="logo" href="/">Vault</a>
+                    </div>
+                    <ul class="main-links nav navbar-nav navbar-right hidden-xs">
+                        <li class="first li-under"><a href="/intro/index.html">Intro</a></li>
+                        <li class="li-under"><a href="/docs/index.html">Docs</a></li>
+                        <li class="li-under"><a href="/community.html">Community</a></li>
+                    </ul>
+                    <button class="navbar-toggle" type="button">
+                       <span class="sr-only">Toggle navigation</span>
+                       <span class="icon-bar"></span>
+                       <span class="icon-bar"></span>
+                       <span class="icon-bar"></span>
+                    </button>                       
+                </div>
+                <div class="buttons hidden-xs">
+            		<nav role="navigation">
+            			<ul class="nav navbar-nav navbar-right">
+            				<li class="first"><a href="/downloads.html">Download</a></li>
+            				<li class=""><a href="https://github.com/hashicorp/vault">GitHub</a></li>
+            			</ul>
+            		</nav>
+                </div>
+            </div>         
+        </div>
+    </div>
+</div>
+
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-offset-1 col-md-2 col-sm-3 col-xs-12">
+					<div class="docs-sidebar hidden-print affix-top" role="complementary">
+			<ul class="nav docs-sidenav">
+				<li>
+					<a href="/intro/index.html">What is Vault?</a>
+				</li>
+
+				<li>
+					<a href="/intro/use-cases.html">Use Cases</a>
+				</li>
+
+				<li>
+					<a href="/intro/vs/index.html">Vault vs. Other Software</a>
+					<ul class="nav">
+						<li>
+							<a href="/intro/vs/chef-puppet-etc.html">Chef, Puppet, etc.</a>
+						</li>
+
+						<li>
+							<a href="/intro/vs/hsm.html">HSMs</a>
+						</li>
+
+						<li>
+							<a href="/intro/vs/dropbox.html">Dropbox</a>
+                        </li>
+
+						<li>
+							<a href="/intro/vs/consul.html">Consul</a>
+                        </li>
+
+						<li>
+							<a href="/intro/vs/kms.html">Amazon KMS</a>
+                        </li>
+
+						<li>
+							<a href="/intro/vs/keywhiz.html">Keywhiz</a>
+						</li>
+
+						<li>
+							<a href="/intro/vs/custom.html">Custom Solutions</a>
+						</li>
+					</ul>
+				</li>
+
+				<li class="active">
+					<a href="/intro/getting-started/install.html">Getting Started</a>
+					<ul class="nav">
+						<li>
+							<a href="/intro/getting-started/install.html">Install Vault</a>
+						</li>
+
+						<li>
+							<a href="/intro/getting-started/dev-server.html">Starting the Server</a>
+						</li>
+
+						<li>
+							<a href="/intro/getting-started/first-secret.html">Your First Secret</a>
+						</li>
+
+						<li>
+							<a href="/intro/getting-started/secret-backends.html">Secret Backends</a>
+						</li>
+
+						<li>
+							<a href="/intro/getting-started/dynamic-secrets.html">Dynamic Secrets</a>
+						</li>
+
+						<li>
+							<a href="/intro/getting-started/help.html">Built-in Help</a>
+						</li>
+
+						<li class="active">
+							<a href="/intro/getting-started/authentication.html">Authentication</a>
+						</li>
+
+						<li>
+							<a href="/intro/getting-started/acl.html">ACLs</a>
+						</li>
+
+						<li>
+							<a href="/intro/getting-started/deploy.html">Deploy Vault</a>
+						</li>
+
+						<li>
+							<a href="/intro/getting-started/next-steps.html">Next Steps</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+
+		</div>  
+		<div id="main-content" class="col-sm-9 col-md-8 col-xs-12" role="main">
+			<div class="bs-docs-section">
+				
+	<h1>Authentication</h1>
+<p>Now that we know how to use the basics of Vault, it is important to understand
+how to authenticate to Vault itself. Up to this point, we haven&#39;t had to
+authenticate because starting the Vault sever in dev mode automatically logs
+us in as root. In practice, you&#39;ll almost always have to manually authenticate.</p>
+<p>On this page, we&#39;ll talk specifically about <em>authentication</em>. On the next
+page, we talk about <em>authorization</em>.
+Authentication is the mechanism of assigning an identity to a Vault user.
+The access control and permissions associated with an identity are
+authorization, and will not covered on this page.</p>
+<p>Vault has pluggable authentication backends, making it easy to authenticate
+with Vault using whatever form works best for your organization. On this page
+we&#39;ll use the token backend as well as the GitHub backend.</p>
+
+<h2>Tokens</h2>
+<p>We&#39;ll first explain token authentication before going over any other
+authentication backends. Token authentication is enabled by default in
+Vault and cannot be disabled. It is also what we&#39;ve been using up to this
+point.</p>
+<p>When you start a dev server with <code>vault server -dev</code>, it outputs your
+<em>root token</em>. The root token is the initial access token to configure Vault.
+It has root privileges, so it can perform any operation within Vault.
+We&#39;ll cover how to limit privileges in the next section.</p>
+<p>You can create more tokens using <code>vault token-create</code>:</p>
+<pre class="highlight plaintext"><code>$ vault token-create
+6c38f603-6441-2161-c543-ee15b7206563
+</code></pre>
+<p>By default, this will create a child token of your current token that
+inherits all the same access control policies. The &quot;child&quot; concept here
+is important: tokens always have a parent, and when that parent token is
+revoked, children can also be revoked all in one operation. This makes it
+easy when removing access for a user, to remove access for all sub-tokens
+that user created as well.</p>
+<p>After a token is created, you can revoke it with <code>vault token-revoke</code>:</p>
+<pre class="highlight plaintext"><code>$ vault token-revoke 6c38f603-6441-2161-c543-ee15b7206563
+Revocation successful.
+</code></pre>
+<p>In a previous section, we use the <code>vault revoke</code> command. This command
+is only used for revoking <em>secrets</em>. For revoking <em>tokens</em>, the
+<code>vault token-revoke</code> command must be used.</p>
+<p>To authenticate with a token, use the <code>vault auth</code> command:</p>
+<pre class="highlight plaintext"><code>$ vault auth d08e2bd5-ffb0-440d-6486-b8f650ec8c0c
+Successfully authenticated! The policies that are associated
+with this token are listed below:
+
+root
+</code></pre>
+<p>This authenticates with Vault. It will verify your token and let you know
+what access policies the token is associated with. If you want to test
+<code>vault auth</code>, make sure you create a new token first.</p>
+
+<h2>Auth Backends</h2>
+<p>In addition to tokens, other authentication backends can be enabled.
+Authentication backends enable alternate methods of identifying with Vault.
+These identities are tied back to a set of access policies, just like tokens.</p>
+<p>Vault supports other authentication backends in order to make authentication
+easiest for your environment. For example, for desktop environments,
+private key or GitHub based authentication may be easiest. For server
+environments, some shared secret may be best. Auth backends give you
+flexibility to choose what authentication you want to use.</p>
+<p>As an example, let&#39;s authenticate using GitHub. First, enable the
+GitHub authentication backend:</p>
+<pre class="highlight plaintext"><code>$ vault auth-enable github
+Successfully enabled 'github' at 'github'!
+</code></pre>
+<p>Auth backends are mounted, just like secret backends, except auth
+backends are always prefixed with <code>auth/</code>. So the GitHub backend we just
+mounted can be accessed at <code>auth/github</code>. You can use <code>vault help</code> to
+learn more about it.</p>
+<p>With the backend enabled, we first have to configure it. For GitHub,
+we tell it what organization users must part of, and map a team to a policy:</p>
+<pre class="highlight plaintext"><code>$ vault write auth/github/config organization=hashicorp
+Success! Data written to: auth/github/config
+
+$ vault write auth/github/map/teams/default value=root
+Success! Data written to: auth/github/map/teams/default
+</code></pre>
+<p>The above configured our GitHub backend to only accept users from the
+&quot;hashicorp&quot; organization (you should fill in your own organization)
+and to map any team to the &quot;root&quot; policy, which is the only policy we have
+right now until the next section.</p>
+<p>With GitHub enabled, we can authenticate using <code>vault auth</code>:</p>
+<pre class="highlight plaintext"><code>$ vault auth -method=github token=e6919b17dd654f2b64e67b6369d61cddc0bcc7d5
+Successfully authenticated! The policies that are associated
+with this token are listed below:
+
+root
+</code></pre>
+<p>Success! We&#39;ve authenticated using GitHub. The &quot;root&quot; policy was associated
+with my identity since we mapped that earlier. The value for &quot;token&quot; should be your own
+<a href="https://help.github.com/articles/creating-an-access-token-for-command-line-use/">personal access token</a>.</p>
+<p>You can revoke authentication from any authentication backend using
+<code>vault token-revoke</code> as well, which can revoke any path prefix. For
+example, to revoke all GitHub tokens, you could run the following.
+<strong>Don&#39;t run this unless you have access to another root token or you&#39;ll
+get locked out.</strong></p>
+<pre class="highlight plaintext"><code>$ vault token-revoke -mode=path auth/github
+</code></pre>
+<p>When you&#39;re done, you can disable authentication backends with
+<code>vault auth-disable</code>. This will immediately invalidate all authenticated
+users from this backend.</p>
+<pre class="highlight plaintext"><code>$ vault auth-disable github
+Disabled auth provider at path 'github'!
+</code></pre>
+<p>If you ran the above, you&#39;ll probably find you can&#39;t access your Vault
+anymore unless you have another root token, since it invalidated your
+own session since we authenticated with GitHub above. Since we&#39;re still
+operating in development mode, just restart the dev server to fix this.</p>
+
+<h2>Next</h2>
+<p>In this page you learned about how Vault authenticates users. You learned
+about the built-in token system as well as enabling other authentication
+backends. At this point you know how Vault assigns an <em>identity</em> to
+a user.</p>
+<p>The multiple authentication backends Vault provides let you choose the
+most appropriate authentication mechanism for your organization.</p>
+<p>In this next section, we&#39;ll learn about
+<a href="/intro/getting-started/acl.html">access control policies</a>.</p>
+
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+<script type="text/x-handlebars" data-template-name="demo">
+{{outlet}}
+</script>
+
+<script type="text/x-handlebars" data-template-name="demo/step">
+
+<div class="instruction-wrapper">
+    <div class="instruction">
+        <p>
+        <strong>{{model.humanName}}</strong>
+        </p>
+
+        {{partial model.instructionTemplate}}
+    </div>
+</div>
+
+<span class="close-terminal" {{action "close"}}>X</span>
+
+<div {{bind-attr class=":demo-terminal fullscreen:fullscreen" }}>
+    <div class="log">{{renderedLogs}}</div>
+
+    <form {{action "submitText" on="submit"}}>
+        {{#unless isLoading}}${{/unless}} {{input value=currentText class="shell" spellcheck="false"}}
+    </form>
+
+    {{#if isLoading}}
+    <div class="loading-bar"></div>
+    {{/if}}
+</div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="welcome">
+    <p>
+        This tutorial is great for getting familiar with the command line
+         interface to Vault. As soon as you opened this terminal, you connected to a real in-memory Vault server.
+        Any commands you enter will work as they would with Vault normally, but leaving this page
+        will end the session.
+    </p>
+    <p>
+     Please note that this is running in a shared environment, so avoid setting any real secrets.
+    </p>
+    <p>
+        <strong>Use the command "next" to move forward</strong>.
+    </p>
+    <p>This will work throughout
+        the tutorial, along with "previous" to go back a step.
+    </p>
+</script>
+
+
+<script type="text/x-handlebars" data-template-name="steps">
+    <p>
+        This tutorial will cover the following steps:
+    </p>
+    <ul>
+        <li>- Initializing and unsealing your Vault</li>
+        <li>- Authorizing your requests to Vault</li>
+        <li>- Reading and writing secrets</li>
+        <li>- Sealing your Vault</li>
+    </ul>
+    <p>
+        <strong>Again, use "next" to move to the first step – initializing your Vault</strong>.
+    </p>
+</script>
+
+<script type="text/x-handlebars" data-template-name="init">
+    <p>
+        To get started, we need to initialize an instance of Vault for you
+        to work with.
+    </p>
+    <p>
+        While initializing, you can configure the seal behavior
+        of Vault.
+        </p>
+    <p>
+        Initialize Vault now, with 1 unseal key for simplicity, using the command:
+    </p>
+    <p>
+        <code>vault init -key-shares=1 -key-threshold=1</code>
+    </p>
+    <p>
+        You'll notice Vault prints out several keys here. Don't clear your terminal,
+        as these are needed in the next few steps.
+    </p>
+</script>
+
+<script type="text/x-handlebars" data-template-name="unseal">
+    <p>
+        When a Vault server is started, it starts in a sealed state.
+         In this state, Vault is configured to know where and how to access the
+         physical storage, but doesn't know how to decrypt any of it.
+    </p>
+    <p>
+        Vault encrypts data with an encryption key. This key is encrypted with the "master key", which
+        isn't stored. Decrypting the master key requires a threshold of shards. In this example,
+        we use one shard to decrypt this master key.
+    </p>
+    <p>
+        Unseal the Vault:
+    </p>
+    <p>
+        <code>vault unseal &lt;key 1&gt;</code>
+    </p>
+</script>
+
+<script type="text/x-handlebars" data-template-name="auth">
+    <p>
+        Before performing any operation with Vault, the
+        connecting client must be authenticated. Authentication is
+        the process of verifying a person or machine is who they say
+        they are and assigning an identity to them. This identity is then
+        used when making requests with Vault.
+    </p>
+    <p>
+        For simplicity, we'll use the root token we generated on init in Step 2. This
+        output should be available in the scrollback.
+    </p>
+    <p>
+        Authorize with a client token:
+    </p>
+    <p>
+        <code>vault auth &lt;root token&gt;</code>
+    </p>
+</script>
+
+<script type="text/x-handlebars" data-template-name="secrets">
+    <p>
+        Now that Vault has been set-up, we can start reading and writing secrets
+        with the default mounted secret backend. Secrets written to Vault
+        are encrypted and then written to the backend storage.
+        The backend storage mechanism never sees the unencrypted
+        value and doesn't have the means necessary to decrypt
+        it without Vault.
+    </p>
+    <p>
+        <code>vault write secret/hello value=world</code>
+    </p>
+    <p>
+        Of course, you can then read this data too:
+    </p>
+    <p>
+        <code>vault read secret/hello</code>
+    </p>
+</script>
+
+<script type="text/x-handlebars" data-template-name="seal">
+    <p>
+        There is also an API to seal the Vault. This will throw
+        away the encryption key and require another unseal process
+        to restore it. Sealing only requires a single operator
+        with root privileges. This is typically part of a rare "break glass
+        procedure".
+    </p>
+    <p>
+        This way, if there is a detected intrusion, the Vault data can be locked
+        quickly to try to minimize damages. It can't be accessed again
+        without access to the master key shards.
+    </p>
+    <p>
+        <code>vault seal</code>
+    </p>
+</script>
+
+<script type="text/x-handlebars" data-template-name="finish">
+    <p>
+        Thanks for trying out the Vault CLI. If you want to keep playing with
+        commands, use "fu" to go fullscreen.
+    </p>
+    <p>
+        Note that the Vault CLI uses the HTTP API, which gives you full access to Vault. Every aspect
+        of Vault can be controlled via this API.
+    </p>
+    <p>
+        We recommend reading through the <a href="/intro/index.html">intro guide</a> next, which will
+        provide more background information, use cases and examples.
+    </p>
+</script>
+
+	<div id="footer">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-offset-1 col-md-5 col-sm-6 col-xs-12">
+					<ul class="footer-links nav navbar-nav">
+						<li class="li-under"><a href="/intro/index.html">Intro</a></li>
+						<li class="li-under"><a href="/docs/index.html">Docs</a></li>
+						<li class="li-under"><a href="/community.html">Community</a></li>
+						<li class="li-under"><a href="/security.html">Security</a></li>
+					</ul>
+				</div>
+				<div class="footer-hashi col-md-5 col-sm-6 col-xs-12">
+					<div class="pull-right">
+						<span>A <a href="https://www.hashicorp.com">HashiCorp</a> Project.</span>
+						<a class="hashi-logo" href="https://www.hashicorp.com"><i class="hashi-logo"></i></a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-62364009-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<script src="/assets/javascripts/application-e782a4a8.js" type="text/javascript"></script>
+
+</body>
+</html>

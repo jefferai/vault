@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Learn how to deploy Vault into production, how to initialize it, configure it, etc.">
+
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+
+    <title>Deploy Vault - Vault by HashiCorp</title>
+
+    <link href="/assets/stylesheets/application-4b1f25b3.css" rel="stylesheet"/>
+
+    <!--[if lt IE 9]><script src="/assets/javascripts/html5shiv-62fced3a.js" type="text/javascript"></script><script src="/assets/javascripts/respond.min-88c91176.js" type="text/javascript"></script><![endif]-->
+
+    
+  </head>
+
+  <body id="page-Deploy Vault" class="page-Deploy Vault layout-intro page-sub">
+
+<div id="header" class="navbar-static-top">
+	<div class="container">
+        <div class="row">
+            <div class="col-md-offset-1 col-md-10 col-xs-12">
+                <div class="navbar-header">
+                    <div class="navbar-brand">
+                         <a class="logo" href="/">Vault</a>
+                    </div>
+                    <ul class="main-links nav navbar-nav navbar-right hidden-xs">
+                        <li class="first li-under"><a href="/intro/index.html">Intro</a></li>
+                        <li class="li-under"><a href="/docs/index.html">Docs</a></li>
+                        <li class="li-under"><a href="/community.html">Community</a></li>
+                    </ul>
+                    <button class="navbar-toggle" type="button">
+                       <span class="sr-only">Toggle navigation</span>
+                       <span class="icon-bar"></span>
+                       <span class="icon-bar"></span>
+                       <span class="icon-bar"></span>
+                    </button>                       
+                </div>
+                <div class="buttons hidden-xs">
+            		<nav role="navigation">
+            			<ul class="nav navbar-nav navbar-right">
+            				<li class="first"><a href="/downloads.html">Download</a></li>
+            				<li class=""><a href="https://github.com/hashicorp/vault">GitHub</a></li>
+            			</ul>
+            		</nav>
+                </div>
+            </div>         
+        </div>
+    </div>
+</div>
+
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-offset-1 col-md-2 col-sm-3 col-xs-12">
+					<div class="docs-sidebar hidden-print affix-top" role="complementary">
+			<ul class="nav docs-sidenav">
+				<li>
+					<a href="/intro/index.html">What is Vault?</a>
+				</li>
+
+				<li>
+					<a href="/intro/use-cases.html">Use Cases</a>
+				</li>
+
+				<li>
+					<a href="/intro/vs/index.html">Vault vs. Other Software</a>
+					<ul class="nav">
+						<li>
+							<a href="/intro/vs/chef-puppet-etc.html">Chef, Puppet, etc.</a>
+						</li>
+
+						<li>
+							<a href="/intro/vs/hsm.html">HSMs</a>
+						</li>
+
+						<li>
+							<a href="/intro/vs/dropbox.html">Dropbox</a>
+                        </li>
+
+						<li>
+							<a href="/intro/vs/consul.html">Consul</a>
+                        </li>
+
+						<li>
+							<a href="/intro/vs/kms.html">Amazon KMS</a>
+                        </li>
+
+						<li>
+							<a href="/intro/vs/keywhiz.html">Keywhiz</a>
+						</li>
+
+						<li>
+							<a href="/intro/vs/custom.html">Custom Solutions</a>
+						</li>
+					</ul>
+				</li>
+
+				<li class="active">
+					<a href="/intro/getting-started/install.html">Getting Started</a>
+					<ul class="nav">
+						<li>
+							<a href="/intro/getting-started/install.html">Install Vault</a>
+						</li>
+
+						<li>
+							<a href="/intro/getting-started/dev-server.html">Starting the Server</a>
+						</li>
+
+						<li>
+							<a href="/intro/getting-started/first-secret.html">Your First Secret</a>
+						</li>
+
+						<li>
+							<a href="/intro/getting-started/secret-backends.html">Secret Backends</a>
+						</li>
+
+						<li>
+							<a href="/intro/getting-started/dynamic-secrets.html">Dynamic Secrets</a>
+						</li>
+
+						<li>
+							<a href="/intro/getting-started/help.html">Built-in Help</a>
+						</li>
+
+						<li>
+							<a href="/intro/getting-started/authentication.html">Authentication</a>
+						</li>
+
+						<li>
+							<a href="/intro/getting-started/acl.html">ACLs</a>
+						</li>
+
+						<li class="active">
+							<a href="/intro/getting-started/deploy.html">Deploy Vault</a>
+						</li>
+
+						<li>
+							<a href="/intro/getting-started/next-steps.html">Next Steps</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+
+		</div>  
+		<div id="main-content" class="col-sm-9 col-md-8 col-xs-12" role="main">
+			<div class="bs-docs-section">
+				
+	<h1>Deploy Vault</h1>
+<p>Up to this point, we&#39;ve been working with the dev server, which
+automatically authenticated us, setup in-memory storage, etc. Now that
+you know the basics of Vault, it is important to learn how to deploy
+Vault into a real environment.</p>
+<p>On this page, we&#39;ll cover how to configure Vault, start Vault, the
+seal/unseal process, and scaling Vault.</p>
+
+<h2>Configuring Vault</h2>
+<p>Vault is configured using <a href="https://github.com/hashicorp/hcl">HCL</a> files.
+As a reminder, these files are also JSON-compatible. The configuration
+file for Vault is relatively simple. An example is shown below:</p>
+<pre class="highlight javascript"><code><span class="nx">backend</span> <span class="s2">"consul"</span> <span class="p">{</span>
+  <span class="nx">address</span> <span class="o">=</span> <span class="s2">"demo.consul.io:80"</span>
+  <span class="nx">path</span> <span class="o">=</span> <span class="s2">"vault"</span>
+<span class="p">}</span>
+
+<span class="nx">listener</span> <span class="s2">"tcp"</span> <span class="p">{</span>
+ <span class="nx">address</span> <span class="o">=</span> <span class="s2">"127.0.0.1:8200"</span>
+ <span class="nx">tls_disable</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="p">}</span>
+</code></pre>
+<p>Within the configuration file, there are two primary configurations:</p>
+
+<ul>
+<li><p><code>backend</code> - This is the physical backend that Vault uses for
+storage. Up to this point the dev server has used &quot;inmem&quot; (in memory),
+but in the example above we&#39;re using <a href="http://www.consul.io">Consul</a>,
+a much more production-ready backend.</p>
+</li>
+<li><p><a name="listener"/><a href="#listener"><code>listener</code></a> - One or more listeners determine how Vault listens for
+API requests. In the example above we&#39;re listening on localhost port
+8200 without TLS.</p>
+</li>
+</ul>
+<p>For now, copy and paste the configuration above. Change the <code>path</code>
+for Consul to something unique for you to make sure you don&#39;t overlap
+with anyone else following this guide. We&#39;ll use this demo cluster to
+learn how to deploy Vault.</p>
+<div class="alert alert-warning" role="alert">
+<p><strong>Warning:</strong> The demo consul cluster deletes its data every 30 minutes.
+If this happens while you&#39;re learning to use Vault, you&#39;ll lose your data.
+Just restart Vault and start over, knowing you have another 30 minutes.</p>
+</div>
+
+<h2>Starting the Server</h2>
+<p>With the configuration in place, starting the server is simple, as
+shown below. Modify the <code>-config</code> flag to point to the the proper path
+where you saved the configuration above.</p>
+<pre class="highlight plaintext"><code>$ vault server -config=example.hcl
+==&gt; Vault server configuration:
+
+         Log Level: info
+           Backend: consul
+        Listener 1: tcp (addr: "127.0.0.1:8200", tls: "disabled")
+
+==&gt; Vault server started! Log data will stream in below:
+</code></pre>
+<p>Vault outputs some information about its configuration, and then blocks.
+This process should be run using a resource manager such as systemd or
+upstart.</p>
+<p>You&#39;ll notice that you can&#39;t execute any commands. We don&#39;t have any
+auth information! When you first setup a Vault server, you have to start
+by <em>initializing</em> it.</p>
+
+<h2>Initializing the Vault</h2>
+<p>Initialization is the process of first configuring the Vault. This
+only happens once when the server is started against a new backend that
+has never been used with Vault before.</p>
+<p>During initialization, the encryption keys are generated, unseal keys
+are created, and the initial root token is setup. To initialize Vault
+use <code>vault init</code>. This is an <em>unauthenticated</em> request, but it only works
+on brand new Vaults with no data:</p>
+<pre class="highlight plaintext"><code>$ vault init
+Key 1: 427cd2c310be3b84fe69372e683a790e01
+Key 2: 0e2b8f3555b42a232f7ace6fe0e68eaf02
+Key 3: 37837e5559b322d0585a6e411614695403
+Key 4: 8dd72fd7d1af254de5f82d1270fd87ab04
+Key 5: b47fdeb7dda82dbe92d88d3c860f605005
+Initial Root Token: eaf5cc32-b48f-7785-5c94-90b5ce300e9b
+
+Vault initialized with 5 keys and a key threshold of 3!
+
+Please securely distribute the above keys. Whenever a Vault server
+is started, it must be unsealed with 3 (the threshold)
+of the keys above (any of the keys, as long as the total number equals
+the threshold).
+
+Vault does not store the original master key. If you lose the keys
+above such that you no longer have the minimum number (the
+threshold), then your Vault will not be able to be unsealed.
+</code></pre>
+<p>Initialization outputs two incredibly important pieces of information:
+the <em>unseal keys</em> and the <em>initial root token</em>. This is the
+<strong>only time ever</strong> that all of this data is known by Vault, and also the
+only time that the unseal keys should ever be so close together.</p>
+<p>For the purpose of this getting started guide, save all these keys
+somewhere, and continue. In a real deployment scenario, you would never
+save these keys together.</p>
+
+<h2>Seal/Unseal</h2>
+<p>Every initialized Vault server starts in the <em>sealed</em> state. From
+the configuration, Vault can access the physical storage, but it can&#39;t
+read any of it because it doesn&#39;t know how to decrypt it. The process
+of teaching Vault how to decrypt the data is known as <em>unsealing</em> the
+Vault.</p>
+<p>Unsealing has to happen every time Vault starts. It can be done via
+the API and via the command line. To unseal the Vault, you
+must have the <em>threshold</em> number of unseal keys. In the output above,
+notice that the &quot;key threshold&quot; is 3. This means that to unseal
+the Vault, you need 3 of the 5 keys that were generated.</p>
+<div class="alert alert-info" role="alert">
+<p><strong>Note:</strong> Vault does not store any of the unseal key shards. Vault
+uses an algorithm known as
+<a href="http://en.wikipedia.org/wiki/Shamir%27s_Secret_Sharing">Shamir&#39;s Secret Sharing</a>
+to split the master key into shards. Only with the threshold number of keys
+can it be reconstructed and your data finally accessed.</p>
+</div>
+<p>Begin unsealing the Vault with <code>vault unseal</code>:</p>
+<pre class="highlight plaintext"><code>$ vault unseal
+Key (will be hidden):
+Sealed: true
+Key Shares: 5
+Key Threshold: 3
+Unseal Progress: 1
+</code></pre>
+<p>After pasting in a valid key and confirming, you&#39;ll see that the Vault
+is still sealed, but progress is made. Vault knows it has 1 key out of 3.
+Due to the nature of the algorithm, Vault doesn&#39;t know if it has the
+<em>correct</em> key until the threshold is reached.</p>
+<p>Also notice that the unseal process is stateful. You can go to another
+computer, use <code>vault unseal</code>, and as long as its pointing to the same server,
+that other computer can continue the unseal process.. This is incredibly
+important to the design of the unseal process: multiple people with multiple
+keys are required to unseal the Vault. The Vault can be unsealed from
+multiple computers and the keys should never be together. A single malicious
+operator does not have enough keys to be malicious.</p>
+<p>Continue with <code>vault unseal</code> to complete unsealing the Vault. Note that
+all 3 keys must be different, but they can be any other keys. As long as
+they&#39;re correct, you should soon see output like this:</p>
+<pre class="highlight plaintext"><code>$ vault unseal
+Key (will be hidden):
+Sealed: false
+Key Shares: 5
+Key Threshold: 3
+Unseal Progress: 0
+</code></pre>
+<p>The <code>Sealed: false</code> means the Vault is unsealed!</p>
+<p>Feel free to play around with entering invalid keys, keys in different
+orders, etc. in order to understand the unseal process. It is very important.
+Once you&#39;re ready to move on, use <code>vault auth</code> to authenticate with
+the root token.</p>
+<p>As a root user, you can reseal the Vault with <code>vault seal</code>. A single
+operator is allowed to do this. This lets a single operator lock down
+the Vault in an emergency without consulting other operators.</p>
+<p>When the Vault is sealed again, it clears all of its state (including
+the encryption key) from memory. The Vault is secure and locked down
+from access.</p>
+
+<h2>Next</h2>
+<p>You now know how to configure, initialize, and unseal/seal Vault.
+This is the basic knowledge necessary to deploy Vault into a real
+environment. Once the Vault is unsealed, you access it as you have
+throughout this getting started guide (which worked with an unsealed Vault).</p>
+<p>Congratulations! You now know all the basics to get started with Vault.</p>
+<p>Next, we have a page dedicated to
+<a href="/intro/getting-started/next-steps.html">next steps</a> depending on
+what you&#39;d like to achieve.</p>
+
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+<script type="text/x-handlebars" data-template-name="demo">
+{{outlet}}
+</script>
+
+<script type="text/x-handlebars" data-template-name="demo/step">
+
+<div class="instruction-wrapper">
+    <div class="instruction">
+        <p>
+        <strong>{{model.humanName}}</strong>
+        </p>
+
+        {{partial model.instructionTemplate}}
+    </div>
+</div>
+
+<span class="close-terminal" {{action "close"}}>X</span>
+
+<div {{bind-attr class=":demo-terminal fullscreen:fullscreen" }}>
+    <div class="log">{{renderedLogs}}</div>
+
+    <form {{action "submitText" on="submit"}}>
+        {{#unless isLoading}}${{/unless}} {{input value=currentText class="shell" spellcheck="false"}}
+    </form>
+
+    {{#if isLoading}}
+    <div class="loading-bar"></div>
+    {{/if}}
+</div>
+</script>
+
+<script type="text/x-handlebars" data-template-name="welcome">
+    <p>
+        This tutorial is great for getting familiar with the command line
+         interface to Vault. As soon as you opened this terminal, you connected to a real in-memory Vault server.
+        Any commands you enter will work as they would with Vault normally, but leaving this page
+        will end the session.
+    </p>
+    <p>
+     Please note that this is running in a shared environment, so avoid setting any real secrets.
+    </p>
+    <p>
+        <strong>Use the command "next" to move forward</strong>.
+    </p>
+    <p>This will work throughout
+        the tutorial, along with "previous" to go back a step.
+    </p>
+</script>
+
+
+<script type="text/x-handlebars" data-template-name="steps">
+    <p>
+        This tutorial will cover the following steps:
+    </p>
+    <ul>
+        <li>- Initializing and unsealing your Vault</li>
+        <li>- Authorizing your requests to Vault</li>
+        <li>- Reading and writing secrets</li>
+        <li>- Sealing your Vault</li>
+    </ul>
+    <p>
+        <strong>Again, use "next" to move to the first step – initializing your Vault</strong>.
+    </p>
+</script>
+
+<script type="text/x-handlebars" data-template-name="init">
+    <p>
+        To get started, we need to initialize an instance of Vault for you
+        to work with.
+    </p>
+    <p>
+        While initializing, you can configure the seal behavior
+        of Vault.
+        </p>
+    <p>
+        Initialize Vault now, with 1 unseal key for simplicity, using the command:
+    </p>
+    <p>
+        <code>vault init -key-shares=1 -key-threshold=1</code>
+    </p>
+    <p>
+        You'll notice Vault prints out several keys here. Don't clear your terminal,
+        as these are needed in the next few steps.
+    </p>
+</script>
+
+<script type="text/x-handlebars" data-template-name="unseal">
+    <p>
+        When a Vault server is started, it starts in a sealed state.
+         In this state, Vault is configured to know where and how to access the
+         physical storage, but doesn't know how to decrypt any of it.
+    </p>
+    <p>
+        Vault encrypts data with an encryption key. This key is encrypted with the "master key", which
+        isn't stored. Decrypting the master key requires a threshold of shards. In this example,
+        we use one shard to decrypt this master key.
+    </p>
+    <p>
+        Unseal the Vault:
+    </p>
+    <p>
+        <code>vault unseal &lt;key 1&gt;</code>
+    </p>
+</script>
+
+<script type="text/x-handlebars" data-template-name="auth">
+    <p>
+        Before performing any operation with Vault, the
+        connecting client must be authenticated. Authentication is
+        the process of verifying a person or machine is who they say
+        they are and assigning an identity to them. This identity is then
+        used when making requests with Vault.
+    </p>
+    <p>
+        For simplicity, we'll use the root token we generated on init in Step 2. This
+        output should be available in the scrollback.
+    </p>
+    <p>
+        Authorize with a client token:
+    </p>
+    <p>
+        <code>vault auth &lt;root token&gt;</code>
+    </p>
+</script>
+
+<script type="text/x-handlebars" data-template-name="secrets">
+    <p>
+        Now that Vault has been set-up, we can start reading and writing secrets
+        with the default mounted secret backend. Secrets written to Vault
+        are encrypted and then written to the backend storage.
+        The backend storage mechanism never sees the unencrypted
+        value and doesn't have the means necessary to decrypt
+        it without Vault.
+    </p>
+    <p>
+        <code>vault write secret/hello value=world</code>
+    </p>
+    <p>
+        Of course, you can then read this data too:
+    </p>
+    <p>
+        <code>vault read secret/hello</code>
+    </p>
+</script>
+
+<script type="text/x-handlebars" data-template-name="seal">
+    <p>
+        There is also an API to seal the Vault. This will throw
+        away the encryption key and require another unseal process
+        to restore it. Sealing only requires a single operator
+        with root privileges. This is typically part of a rare "break glass
+        procedure".
+    </p>
+    <p>
+        This way, if there is a detected intrusion, the Vault data can be locked
+        quickly to try to minimize damages. It can't be accessed again
+        without access to the master key shards.
+    </p>
+    <p>
+        <code>vault seal</code>
+    </p>
+</script>
+
+<script type="text/x-handlebars" data-template-name="finish">
+    <p>
+        Thanks for trying out the Vault CLI. If you want to keep playing with
+        commands, use "fu" to go fullscreen.
+    </p>
+    <p>
+        Note that the Vault CLI uses the HTTP API, which gives you full access to Vault. Every aspect
+        of Vault can be controlled via this API.
+    </p>
+    <p>
+        We recommend reading through the <a href="/intro/index.html">intro guide</a> next, which will
+        provide more background information, use cases and examples.
+    </p>
+</script>
+
+	<div id="footer">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-offset-1 col-md-5 col-sm-6 col-xs-12">
+					<ul class="footer-links nav navbar-nav">
+						<li class="li-under"><a href="/intro/index.html">Intro</a></li>
+						<li class="li-under"><a href="/docs/index.html">Docs</a></li>
+						<li class="li-under"><a href="/community.html">Community</a></li>
+						<li class="li-under"><a href="/security.html">Security</a></li>
+					</ul>
+				</div>
+				<div class="footer-hashi col-md-5 col-sm-6 col-xs-12">
+					<div class="pull-right">
+						<span>A <a href="https://www.hashicorp.com">HashiCorp</a> Project.</span>
+						<a class="hashi-logo" href="https://www.hashicorp.com"><i class="hashi-logo"></i></a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-62364009-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<script src="/assets/javascripts/application-e782a4a8.js" type="text/javascript"></script>
+
+</body>
+</html>
