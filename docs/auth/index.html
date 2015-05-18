@@ -237,15 +237,15 @@ and are responsible for assigning identity and a set of policies to a
 user.</p>
 <p>Having multiple auth backends enables you to use an auth backend
 that makes the sense for your use case of Vault and your organization.</p>
-<p>For example, on developer machines, the <a href="/docs/auth/github.html">GitHub auth backend</a>
-is easiest to use. But for servers the <a href="/docs/auth/app-id.html">App ID</a>
+<p>For example, on developer machines, the <a href="docs/auth/github.html">GitHub auth backend</a>
+is easiest to use. But for servers the <a href="docs/auth/app-id.html">App ID</a>
 backend is the recommended choice.</p>
 <p>To learn more about authentication, see the
-<a href="/docs/concepts/auth.html">authentication concepts page</a>.</p>
+<a href="docs/concepts/auth.html">authentication concepts page</a>.</p>
 
 <h2>Enabling/Disabling Auth Backends</h2>
 <p>Auth backends can be enabled/disabled using the CLI or the API.</p>
-<p>When enabled, auth backends are similar to <a href="/docs/secret/index.html">secret backends</a>:
+<p>When enabled, auth backends are similar to <a href="docs/secret/index.html">secret backends</a>:
 they are mounted within the Vault mount table and can be accessed
 and configured using the standard read/write API. The only difference
 is that all auth backends are mounted underneath the <code>auth/</code> prefix.</p>

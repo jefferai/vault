@@ -255,15 +255,15 @@ Vault files:</p>
 <p>This will work. You&#39;ve created your first module! You can add resources
 to the child module to see how that interaction works.</p>
 <p>Note: Prior to running the above, you&#39;ll have to run
-<a href="/docs/commands/get.html">the get command</a> for Vault to sync
+<a href="docs/commands/get.html">the get command</a> for Vault to sync
 your modules. This should be instant since the module is just a local path.</p>
 
 <h2>Inputs/Outputs</h2>
 <p>To make modules more useful than simple isolated containers of Vault
 configurations, modules can be configured and also have outputs that can be
 consumed by the configuration using the module.</p>
-<p>Inputs of a module are <a href="/docs/configuration/variables.html">variables</a>
-and outputs are <a href="/docs/configuration/outputs.html">outputs</a>. There is no
+<p>Inputs of a module are <a href="docs/configuration/variables.html">variables</a>
+and outputs are <a href="docs/configuration/outputs.html">outputs</a>. There is no
 special syntax to define these, they&#39;re defined just like any other
 variables or outputs.</p>
 <p>In the &quot;child&quot; module we created above, add the following:</p>
@@ -298,7 +298,7 @@ or a file to upload.</p>
 <p>In these cases, you can&#39;t use a relative path, since paths in Vault
 are generally relative to the working directory that Vault was executed
 from. Instead, you want to use a module-relative path. To do this, use
-the <a href="/docs/configuration/interpolation.html">path interpolated variables</a>.</p>
+the <a href="docs/configuration/interpolation.html">path interpolated variables</a>.</p>
 <p>An example is shown below:</p>
 <pre class="highlight javascript"><code><span class="nx">resource</span> <span class="s2">"aws_instance"</span> <span class="s2">"server"</span> <span class="p">{</span>
   <span class="p">...</span>
@@ -315,7 +315,7 @@ is usually what you&#39;ll want in any case.</p>
 <p>You can use a module within a module just like you would anywhere else.
 This module will be hidden from the root user, so you&#39;ll have re-expose any
 variables if you need to, as well as outputs.</p>
-<p>The <a href="/docs/commands/get.html">get command</a> will automatically get all
+<p>The <a href="docs/commands/get.html">get command</a> will automatically get all
 nested modules as well.</p>
 <p>You don&#39;t have to worry about conflicting versions of modules, since
 Vault builds isolated subtrees of all dependencies. For example,

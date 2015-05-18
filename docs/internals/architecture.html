@@ -301,7 +301,7 @@ enables centralized audit logging and simplifies administration for operators.</
 
 <h1>High-Level Overview</h1>
 <p>A very high level overview of Vault looks like this:</p>
-<p><img alt="Architecture Overview" src="/assets/images/layers-2909a77d.png"/></p>
+<p><img alt="Architecture Overview" src="/assets/images/assets/images/layers.png"/></p>
 <p>Let&#39;s begin to break down this picture. There is a clear separation of components
 that are inside or outside of the security barrier. Only the storage backend and
 the HTTP API are outside, all other components are inside the barrier.</p>
@@ -316,7 +316,7 @@ data. That key is protected by a master key. By default, Vault uses a technique 
 as <a href="http://en.wikipedia.org/wiki/Shamir's_Secret_Sharing">Shamir&#39;s secret sharing algorithm</a>
 to split the master key into 5 shares, any 3 of which are required to reconstruct the master
 key.</p>
-<p><img alt="Keys" src="/assets/images/keys-468a5903.png"/></p>
+<p><img alt="Keys" src="/assets/images/assets/images/keys.png"/></p>
 <p>The number of shares and the minimum threshold required can both be specified. Shamir&#39;s
 technique can be disabled, and the master key used directly for unsealing. Once Vault
 retrieves the encryption key, it is able to decrypt the data in the storage backend,

@@ -233,13 +233,13 @@
 				
 	<h1>Tokens</h1>
 <p>Tokens are the core method for <em>authentication</em> within Vault. Tokens
-can be used directly or <a href="/docs/concepts/auth.html">authentication backends</a>
+can be used directly or <a href="docs/concepts/auth.html">authentication backends</a>
 can be used to dynamically generate tokens based on external identities.</p>
 <p>If you&#39;ve gone through the getting started guide, you probably noticed that
 <code>vault server -dev</code> (or <code>vault init</code> for a non-dev server) outputs an
 initial &quot;root token.&quot; This is the first method of authentication for Vault.
 It is also the only authentication backend that cannot be disabled.</p>
-<p>As stated in the <a href="/docs/concepts/auth.html">authentication concepts</a>,
+<p>As stated in the <a href="docs/concepts/auth.html">authentication concepts</a>,
 all external authentication mechanisms such as GitHub map down to dynamically
 created tokens. These tokens have all the same properties as a normal
 manually created token.</p>
@@ -257,11 +257,11 @@ when your token is revoked, it will not revoke the orphan.</p>
 the token with information that is added to the audit log.</p>
 <p>Finally, the <code>-policy</code> flag can be used to set the policies associated
 with the token. Learn more about policies on the
-<a href="/docs/concepts/policies.html">policies concepts</a> page.</p>
+<a href="docs/concepts/policies.html">policies concepts</a> page.</p>
 
 <h2>Token Leases</h2>
 <p>Every token has a lease associated with it. These leases behave in much
-the same way as <a href="/docs/concepts/lease.html">leases for secrets</a>. After
+the same way as <a href="docs/concepts/lease.html">leases for secrets</a>. After
 the lease period is up, the token will no longer function. In addition
 to no longer functioning, Vault will revoke it.</p>
 <p>In order to avoid your token being revoked, the <code>vault token-renew</code>

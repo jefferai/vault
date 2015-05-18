@@ -239,7 +239,7 @@
 <span class="p">}</span>
 </code></pre>
 <p>You can view the full documentation for the syntax of configuring
-modules <a href="/docs/configuration/modules.html">here</a>.</p>
+modules <a href="docs/configuration/modules.html">here</a>.</p>
 <p>As you can see, it is very similar to defining resources, with the exception
 that we don&#39;t specify a type, and just a name. This name can be used elsewhere
 in the configuration to reference the module and its variables.</p>
@@ -252,10 +252,10 @@ to remove the module.</p>
 <p>The only required configuration key is the <code>source</code> parameter. The value of
 this tells Vault where the module can be downloaded, updated, etc.
 Vault comes with support for a variety of module sources. These
-are documented on a <a href="/docs/modules/sources.html">separate page</a>.</p>
+are documented on a <a href="docs/modules/sources.html">separate page</a>.</p>
 <p>Prior to running any command such as <code>plan</code> with a configuration that
-uses modules, you&#39;ll have to <a href="/docs/commands/get.html">get</a> the modules.
-This is done using the <a href="/docs/commands/get.html">get command</a>.</p>
+uses modules, you&#39;ll have to <a href="docs/commands/get.html">get</a> the modules.
+This is done using the <a href="docs/commands/get.html">get command</a>.</p>
 <pre class="highlight plaintext"><code>$ vault get
 ...
 </code></pre>
@@ -266,14 +266,14 @@ updates.</p>
 
 <h2>Configuration</h2>
 <p>The parameters used to configure modules, such as the <code>servers</code> parameter
-above, map directly to <a href="/docs/configuration/variables.html">variables</a> within
+above, map directly to <a href="docs/configuration/variables.html">variables</a> within
 the module itself. Therefore, you can quickly discover all the configuration
 for a module by inspecting the source of it very easily.</p>
 <p>Additionally, because these map directly to variables, they&#39;re always simple
 key/value pairs. Modules can&#39;t have complex variable inputs.</p>
 
 <h2>Outputs</h2>
-<p>Modules can also specify their own <a href="/docs/configuration/outputs.html">outputs</a>.
+<p>Modules can also specify their own <a href="docs/configuration/outputs.html">outputs</a>.
 These outputs can be referenced in other places in your configuration.
 For example:</p>
 <pre class="highlight javascript"><code><span class="nx">resource</span> <span class="s2">"aws_instance"</span> <span class="s2">"client"</span> <span class="p">{</span>
@@ -289,9 +289,9 @@ a module.</p>
 resource to the module, so the module will be built first.</p>
 
 <h2>Plans and Graphs</h2>
-<p>With modules, commands such as the <a href="/docs/commands/plan.html">plan command</a>
+<p>With modules, commands such as the <a href="docs/commands/plan.html">plan command</a>
 and
-<a href="/docs/commands/graph.html">graph command</a> will show the module as a single
+<a href="docs/commands/graph.html">graph command</a> will show the module as a single
 unit by default. You can use the <code>-module-depth</code> parameter to expand this
 graph further.</p>
 <p>For example, with a configuration similar to what we&#39;ve built above, here
